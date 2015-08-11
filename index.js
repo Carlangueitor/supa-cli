@@ -1,4 +1,5 @@
 var _ = require('lodash');
+var colors = require('colors/safe');
 var repl = require('repl');
 var vm = require('vm');
 
@@ -21,11 +22,15 @@ function Supa(options) {
 
 
 Supa.prototype.run = function() {
+  console.log(colors.green('Loading ' + _.keys(this.options.load).join(', ') ));
+
   var r = repl.start({
     prompt: this.options.prompt
   });
 
-  r.context = vm.createContext(this.options.load);
+  _.forOwn(this.options.load, function(elem, key) {
+    r.context[key] = elem;
+  });
 };
 
 
